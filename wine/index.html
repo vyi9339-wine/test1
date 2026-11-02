@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glenelly Estate Reserve - 頂級南非波爾多旗艦佳釀</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome WebFont -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Noto Serif TC', 'serif'],
+                        display: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        wine: {
+                            950: '#0d0709',
+                            900: '#1a0b10',
+                            800: '#2d111b',
+                            700: '#4a121a',
+                            600: '#721c2b',
+                            500: '#9e2a3b',
+                            400: '#c24153',
+                        },
+                        gold: {
+                            light: '#f7e7be',
+                            DEFAULT: '#d4af37',
+                            dark: '#9a7516',
+                            muted: '#b89a4d',
+                        },
+                        sand: '#f4ede2'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Chosen Palette: Bordeaux Crimson, Deep Velvet Dark, Warm Champagne Gold */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0d0709;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        .font-serif-tc { font-family: 'Noto Serif TC', serif; }
+        .font-display { font-family: 'Cinzel', serif; }
+
+        .glass-panel {
+            background: rgba(26, 11, 16, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .glass-panel-gold {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(26, 11, 16, 0.8) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #f7e7be 0%, #d4af37 50%, #9a7516 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #b89a4d 100%);
+            color: #0d0709;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            background: linear-gradient(135deg, #f7e7be 0%, #d4af37 100%);
+            box-shadow: 0 6px 28px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Chart Container Strict Constraint */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .hero-bg {
+            background: radial-gradient(circle at 50% 30%, rgba(114, 28, 43, 0.35) 0%, rgba(13, 7, 9, 0.95) 75%), 
+                        url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0709;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a121a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+    </style>
+</head>
+<body class="bg-[#0d0709] text-gray-200 antialiased selection:bg-wine-600 selection:text-gold-light">
+
+<!-- Application Structure Plan:
+     1. Navigation Bar: Sticky, minimalist with gold accents & key section anchors.
+     2. Hero Banner: High-impact visuals featuring bottle showcase, estate provenance, and quick highlights.
+     3. Heritage & Story Interactive Suite (Tabs): 
+        - Lady May & Bordeaux Legacy (Pichon Lalande, Mandela, Glass Museum).
+        - Label Iconography (1783 seal, Lady riding Rhinoceros, Simonsberg etching).
+        - Winemaking Masters & 18th Century Claret Blend Philosophy.
+     4. Interactive Simonsberg Terroir Visualizer: Dynamic Canvas interactive map/section showing soils, winds, & elevation.
+     5. Analytical Wine Dashboard: Chart.js doughnut blend ratios + interactive radar flavor profile.
+     6. Sensorial Tasting & Decanting Guide: Tasting notes with decanting/cellaring interactive slider.
+     7. Curated Gourmet Food Pairing Matrix: Cards with pairing logic.
+     8. International Accolades Wall: Scores from Parker, Decanter, Platter's, Tim Atkin.
+     9. Tasting Inquiry Form: Interactive user form with confirmation feedback.
+-->
+
+<!-- Visualization & Content Choices:
+     - Terroir Section -> HTML5 Canvas 2D interactive diagram -> User hover/click to inspect soil layers & ocean winds -> Intuitive explanation of Simonsberg microclimate -> Native Canvas API (No SVG).
+     - Blend Composition -> Chart.js Doughnut -> Interactive tooltips with grape percentage & roles -> Standard dynamic visual -> Chart.js.
+     - Sensory Profile -> Chart.js Radar Chart -> Clear breakdown of acidity, tannin, oak, fruit -> Chart.js.
+     - Bottle & Landscape -> High-resolution imagery with fallbacks and CSS styling -> High aesthetic impact.
+-->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#0d0709]/90 backdrop-blur-md border-b border-gold/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-full border border-gold/50 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-wine-950 transition-all">
+                    <i class="fa-solid fa-wine-glass text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display text-lg sm:text-xl font-bold tracking-widest text-white">GLENELLY</span>
+                    <span class="text-[10px] uppercase tracking-[0.25em] text-gold font-light">Estate Reserve • Stellenbosch</span>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-widest font-medium">
+                <a href="#hero" class="hover:text-gold transition-colors">首頁</a>
+                <a href="#heritage" class="hover:text-gold transition-colors">酒莊傳奇</a>
+                <a href="#terroir" class="hover:text-gold transition-colors">風土探索</a>
+                <a href="#analysis" class="hover:text-gold transition-colors">品種調配</a>
+                <a href="#tasting" class="hover:text-gold transition-colors">感官品鑒</a>
+                <a href="#awards" class="hover:text-gold transition-colors">權威榮譽</a>
+                <a href="#pairing" class="hover:text-gold transition-colors">美饌搭配</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="#inquiry" class="hidden sm:inline-block px-5 py-2.5 rounded-full border border-gold text-gold hover:bg-gold hover:text-wine-950 text-xs tracking-wider uppercase font-semibold transition-all">
+                    品飲預約
+                </a>
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-300 hover:text-gold focus:outline-none p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-[#180f13] border-b border-gold/20 px-6 py-4 space-y-3">
+            <a href="#hero" class="block text-sm py-2 hover:text-gold border-b border-white/5">首頁</a>
+            <a href="#heritage" class="block text-sm py-2 hover:text-gold border-b border-white/5">酒莊傳奇與酒標</a>
+            <a href="#terroir" class="block text-sm py-2 hover:text-gold border-b border-white/5">Simonsberg 風土解析</a>
+            <a href="#analysis" class="block text-sm py-2 hover:text-gold border-b border-white/5">品種調配與數據</a>
+            <a href="#tasting" class="block text-sm py-2 hover:text-gold border-b border-white/5">品鑑筆記與醒酒</a>
+            <a href="#awards" class="block text-sm py-2 hover:text-gold border-b border-white/5">國際榮譽評分</a>
+            <a href="#pairing" class="block text-sm py-2 hover:text-gold border-b border-white/5">餐酒搭配建議</a>
+            <a href="#inquiry" class="block text-center py-2.5 mt-2 rounded-full gold-btn font-semibold text-xs uppercase">品飲預約與洽詢</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg min-h-screen pt-28 pb-16 flex items-center relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                <!-- Left Info Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full border border-gold/40 bg-wine-900/80 backdrop-blur-md">
+                        <i class="fa-solid fa-award text-gold text-xs"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-gold-light">
+                            Platter's 5-Star 95pts • Decanter 94pts • Tim Atkin 93pts
+                        </span>
+                    </div>
+
+                    <h1 class="font-serif-tc text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
+                        Glenelly Estate Reserve <br>
+                        <span class="font-display italic text-2xl sm:text-4xl gold-gradient-text block mt-2 font-normal">
+                            Red Blend • Stellenbosch, South Africa
+                        </span>
+                    </h1>
+
+                    <p class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-serif-tc">
+                        由波爾多二級莊 Château Pichon Lalande 前莊主 <strong class="text-gold font-normal">May 女爵</strong> 創立。以 Simonsberg 風化花崗岩頂級風土，演繹 18 世紀經典波爾多 Claret 的深邃、精緻與驚人陳年潛力。
+                    </p>
+
+                    <!-- Key Spec Grid -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 max-w-lg mx-auto lg:mx-0 border-t border-gold/20 text-center">
+                        <div class="p-2">
+                            <span class="block font-display text-xl sm:text-2xl font-bold text-gold">1783</span>
+                            <span class="text-[11px] text-gray-400 uppercase tracking-wider">家族釀酒歷史</span>
+                        </div>
+                        <div class="p-2 border-x border-gold/20">
+                            <span class="block font-serif-tc text-xl sm:text-2xl font-bold text-gold">Simonsberg</span>
+                            <span class="text-[11px] text-gray-400 uppercase tracking-wider">南非黃金風土</span>
+                        </div>
+                        <div class="p-2">
+                            <span class="block font-display text-xl sm:text-2xl font-bold text-gold">18 Months</span>
+                            <span class="text-[11px] text-gray-400 uppercase tracking-wider">法國橡木桶陳釀</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#heritage" class="gold-btn px-8 py-4 rounded-full font-semibold text-sm uppercase tracking-wider flex items-center justify-center space-x-2">
+                            <span>探索酒莊與酒標故事</span>
+                            <i class="fa-solid fa-compass"></i>
+                        </a>
+                        <a href="#terroir" class="px-8 py-4 rounded-full border border-gold/40 text-gray-200 hover:border-gold hover:text-gold transition-all text-sm uppercase tracking-wider font-medium flex items-center justify-center space-x-2">
+                            <span>互動風土圖解</span>
+                            <i class="fa-solid fa-mountain"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Bottle Visual Showcase -->
+                <div class="lg:col-span-5 flex justify-center relative">
+                    <div class="relative w-72 sm:w-80 h-[480px] sm:h-[560px] glass-panel-gold rounded-3xl p-6 flex items-center justify-center shadow-2xl">
+                        <!-- Glowing aura background -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-wine-600/30 via-gold/10 to-transparent rounded-3xl blur-xl"></div>
+                        
+                        <!-- Real Bottle Image Rendering -->
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop" 
+                             alt="Glenelly Estate Reserve Bottle & Vineyard" 
+                             class="relative z-10 max-h-full object-contain rounded-2xl shadow-2xl transition-transform duration-700 hover:scale-105 border border-gold/30">
+
+                        <!-- Floating Badge Overlay -->
+                        <div class="absolute -bottom-4 -left-4 bg-[#180f13] border border-gold/40 p-4 rounded-2xl shadow-xl z-20 flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 text-gold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs text-gray-400 uppercase tracking-wider">Flagship Cuvée</span>
+                                <span class="text-sm font-serif-tc font-bold text-white">酒莊旗艦紅酒</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Heritage & Story Suite (Interactive Tabs) -->
+    <section id="heritage" class="py-24 bg-[#120a0e] relative border-t border-gold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-solid fa-book-open"></i> Story & Legacy
+                </span>
+                <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">人文傳奇 • 酒標解碼 • 釀酒工藝</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">點選下方分頁，深入了解波爾多女爵的夢想、酒標背後的符號學以及釀酒師的極致淬鍊。</p>
+            </div>
+
+            <!-- Tab Buttons Navigation -->
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
+                <button onclick="switchTab('tab-winery')" id="btn-tab-winery" class="tab-btn active px-6 py-3 rounded-full text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all border border-gold/40 bg-gold text-wine-950 shadow-lg">
+                    <i class="fa-solid fa-chess-queen mr-2"></i>酒莊傳奇：May 女爵
+                </button>
+                <button onclick="switchTab('tab-label')" id="btn-tab-label" class="tab-btn px-6 py-3 rounded-full text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all border border-gold/30 text-gray-300 hover:border-gold">
+                    <i class="fa-solid fa-stamp mr-2"></i>酒標故事：符號解碼
+                </button>
+                <button onclick="switchTab('tab-winemaker')" id="btn-tab-winemaker" class="tab-btn px-6 py-3 rounded-full text-xs sm:text-sm uppercase tracking-wider font-semibold transition-all border border-gold/30 text-gray-300 hover:border-gold">
+                    <i class="fa-solid fa-flask-vial mr-2"></i>釀酒師與 18 世紀 Claret
+                </button>
+            </div>
+
+            <!-- Tab 1: Winery Story -->
+            <div id="tab-winery" class="tab-content transition-all duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6 space-y-6">
+                        <span class="text-gold text-xs font-semibold uppercase tracking-widest">Madame May-Eliane de Lencquesaing</span>
+                        <h3 class="font-serif-tc text-2xl sm:text-3xl font-bold text-white leading-tight">
+                            從波爾多頂級二級莊 <br><span class="text-gold">Château Pichon Lalande</span> 至南非 Simonsberg
+                        </h3>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            創辦人 May 女爵（May-Eliane de Lencquesaing）曾掌管波爾多著名二級莊 Château Pichon Longueville Comtesse de Lalande（碧尚女爵酒莊）長達近 30 年。2003 年，時年 78 歲高齡的她受南非前總統納爾遜·曼德拉（Nelson Mandela）「欲發展南非必先投資南非」理念的感召，在 Stellenbosch 的 Simonsberg 山麓買下 Glenelly 農地。
+                        </p>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            她將數百年波爾多釀酒哲學帶入南非。酒莊更設有一座收藏超過 340 件珍貴玻璃藝術品的地下博物館（Glass Museum）。在她眼中，玻璃起源於沙粒，葡萄酒源自石礫土壤，兩者皆經由人類智慧與光影淬鍊成永恆的藝術。
+                        </p>
+                        <div class="p-4 rounded-xl bg-wine-900/60 border-l-4 border-gold text-sm text-gold-light italic">
+                            「葡萄酒不僅是土地與天氣的賜予，更是文化傳承、人際連結與愛的象徵。」 — Madame May de Lencquesaing
+                        </div>
+                    </div>
+                    <div class="lg:col-span-6">
+                        <div class="relative rounded-2xl overflow-hidden border border-gold/30 glass-panel p-3">
+                            <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=1000&auto=format&fit=crop" alt="Glenelly Winery Estate" class="w-full h-80 sm:h-96 object-cover rounded-xl">
+                            <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-[#0d0709]/80 backdrop-blur-md border border-white/10">
+                                <span class="text-xs uppercase text-gold font-bold">Stellenbosch Ida's Valley</span>
+                                <p class="text-xs text-gray-300 mt-1">Simonsberg 山麓南坡 123 公頃壯麗莊園，其中 66 公頃精緻葡萄園。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Label Story -->
+            <div id="tab-label" class="tab-content hidden transition-all duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="w-full max-w-md glass-panel p-8 rounded-3xl border border-gold/40 text-center space-y-6">
+                            <div class="inline-block p-4 rounded-full bg-gold/10 border border-gold/30 text-gold text-3xl">
+                                <i class="fa-solid fa-stamp"></i>
+                            </div>
+                            <h4 class="font-serif-tc text-2xl font-bold text-white">酒標符號學靈魂</h4>
+                            <p class="text-xs text-gray-400">融合 250 年波爾多貴族歷史與南非壯麗風土的古典印記</p>
+                            <div class="text-left space-y-4 pt-4 border-t border-white/10">
+                                <div class="flex items-start space-x-3">
+                                    <span class="text-gold font-bold font-display text-base">1783</span>
+                                    <p class="text-xs text-gray-300">圓形封印印章，象徵 de Lencquesaing 家族投入葡萄酒釀造已跨越近 250 年歲月。</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-hippo text-gold text-sm mt-1"></i>
+                                    <p class="text-xs text-gray-300"><strong class="text-gold">貴婦騎犀牛圖騰：</strong>蝕刻一位優雅側騎於南非犀牛背上並平衡酒杯的貴婦，象徵法式精緻優雅征服並和諧融匯南非野性風土。</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-image text-gold text-sm mt-1"></i>
+                                    <p class="text-xs text-gray-300"><strong class="text-gold">莊園手繪蝕刻畫：</strong>細緻描繪 Glenelly 酒莊建築與背景巍峨佇立的 Simonsberg 山脊。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-7 space-y-6">
+                        <span class="text-gold text-xs font-semibold uppercase tracking-widest">Iconography & Symbolism</span>
+                        <h3 class="font-serif-tc text-2xl sm:text-3xl font-bold text-white leading-tight">
+                            跨越兩個世紀的歷史印章 <br>與優雅征服的經典意象
+                        </h3>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            Glenelly Estate Reserve 的酒標視覺並非單純的現代行銷圖案，而是直接承載著波爾多家族榮譽的歷史封印。中央印製的「1783」印章提醒品飲者，每一滴酒液背後都是兩個多世紀的傳承。
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="p-4 rounded-xl bg-wine-900/50 border border-gold/20">
+                                <h5 class="text-gold font-bold text-sm mb-1">法式極致優雅</h5>
+                                <p class="text-xs text-gray-400">傳承波爾多經典 Claret 比例，嚴謹、細緻與收斂。</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-wine-900/50 border border-gold/20">
+                                <h5 class="text-gold font-bold text-sm mb-1">南非風土張力</h5>
+                                <p class="text-xs text-gray-400">陽光賦予的濃郁黑果香與 Simonsberg 花崗岩礦物脊梁。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Winemaker & Claret Blend -->
+            <div id="tab-winemaker" class="tab-content hidden transition-all duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <span class="text-gold text-xs font-semibold uppercase tracking-widest">Master Craftsmanship</span>
+                        <h3 class="font-serif-tc text-2xl sm:text-3xl font-bold text-white leading-tight">
+                            致敬 18 世紀 Claret 調配工藝 <br>與每 4 個月的天然換桶（Racking）
+                        </h3>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            酒莊釀酒團隊（前釀酒師 Luke O'Cuinneagain 與現任釀酒總監 Dirk van Zyl）堅持致敬 18 世紀波爾多 Claret 的傳統——當時波爾多釀酒師常添入適量隆河區的希哈（Syrah），為骨架堅硬的卡本內注入花香與辛香層次。
+                        </p>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            葡萄經人工精細分揀，於不鏽鋼槽進行溫控發酵並帶皮浸漬 2-3 週。隨後進入法國橡木桶陳釀 18 個月。釀酒師堅持**每 4 個月進行一次傳統換桶（Racking）**，使酒液在不經過過度過濾的情況下自然澄清，保留純淨果香與絲滑單寧。
+                        </p>
+                    </div>
+                    <div class="lg:col-span-5">
+                        <div class="glass-panel rounded-2xl p-6 border border-gold/30 space-y-4">
+                            <h4 class="font-serif-tc text-lg font-bold text-white border-b border-gold/20 pb-3">釀造技術關鍵指標</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400">採收方式</span>
+                                <span class="text-white font-semibold">100% 手工採收與雙重分揀</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400">橡木桶規格</span>
+                                <span class="text-white font-semibold">300L 法國橡木桶 (約30%新桶)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400">陳釀時間</span>
+                                <span class="text-white font-semibold">18 個月熟成</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400">換桶頻率</span>
+                                <span class="text-white font-semibold">每 4 個月自然 Racking 澄清</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400">陳年潛力</span>
+                                <span class="text-gold font-bold">15 - 20 年以上</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Terroir Visualizer Section (HTML5 Canvas Interactive Diagram) -->
+    <section id="terroir" class="py-24 bg-[#0d0709] relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-solid fa-mountain-sun"></i> Simonsberg Terroir Interactive Diagram
+                </span>
+                <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">Simonsberg 獨家風土剖面圖</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">滑鼠懸停或點選下方的動態風土節點，探索花崗岩土壤、海拔與 False Bay 海洋涼風如何淬鍊出極緻風味。</p>
+            </div>
+
+            <!-- Dynamic Interactive Canvas Section -->
+            <div class="glass-panel p-6 rounded-3xl border border-gold/30 shadow-2xl relative overflow-hidden">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    
+                    <!-- Canvas Drawing Area -->
+                    <div class="w-full lg:w-7/12 relative">
+                        <canvas id="terroirCanvas" class="w-full h-80 sm:h-96 rounded-2xl cursor-pointer border border-white/10 bg-[#160b10]"></canvas>
+                        <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/30 text-[11px] text-gold">
+                            <i class="fa-solid fa-hand-pointer mr-1"></i> 點選黃色亮點查看風土細節
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Details Panel -->
+                    <div class="w-full lg:w-5/12 space-y-6">
+                        <div id="terroir-detail-box" class="p-6 rounded-2xl bg-wine-900/80 border border-gold/40 transition-all duration-300 min-h-[260px] flex flex-col justify-center">
+                            <span id="terroir-tag" class="text-xs uppercase tracking-widest font-bold text-gold mb-2 block">風土亮點 1</span>
+                            <h3 id="terroir-title" class="font-serif-tc text-2xl font-bold text-white mb-3">風化花崗岩土壤 (Decomposed Granite)</h3>
+                            <p id="terroir-desc" class="text-gray-300 text-sm leading-relaxed">
+                                Simonsberg 山坡覆蓋著古老的中生代風化花崗岩。此土壤貧瘠且排水極佳，強迫葡萄藤根系扎入數公尺深處汲取礦物質，賦予 Estate Reserve 堅實的單寧骨架與鮮明的礦物脊梁。
+                            </p>
+                        </div>
+
+                        <!-- Soil & Microclimate Quick Metrics -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <span class="block text-xs text-gray-400">海風調節距</span>
+                                <span class="font-display text-lg text-gold font-bold">25 km</span>
+                                <span class="block text-[11px] text-gray-400">False Bay 海洋氣流</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <span class="block text-xs text-gray-400">葡萄園海拔</span>
+                                <span class="font-display text-lg text-gold font-bold">150 - 400 m</span>
+                                <span class="block text-[11px] text-gray-400">Simonsberg 山麓南坡</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytical Wine Dashboard (Chart.js Integration) -->
+    <section id="analysis" class="py-24 bg-[#120a0e] relative border-t border-gold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-solid fa-chart-pie"></i> Blend Composition & Profile
+                </span>
+                <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">混釀比例與感官數據圖表</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">以科學數據解析 Estate Reserve 的品種架構與極致風味輪廓。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Blend Doughnut Chart Container -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-gold/30 flex flex-col items-center">
+                    <h3 class="font-serif-tc text-xl font-bold text-white mb-2 text-center">波爾多與隆河風格品種調配 (%)</h3>
+                    <p class="text-xs text-gray-400 mb-6 text-center">Cabernet Sauvignon 為骨幹，交織 Syrah 的辛香香氛</p>
+                    <div class="chart-container">
+                        <canvas id="blendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Flavor Profile Radar Chart Container -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-gold/30 flex flex-col items-center">
+                    <h3 class="font-serif-tc text-xl font-bold text-white mb-2 text-center">酒款結構雷達圖 (Sensory Profile)</h3>
+                    <p class="text-xs text-gray-400 mb-6 text-center">平衡、酸度張力與陳年實力的完美展現</p>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Tasting Notes & Decanting Guide -->
+    <section id="tasting" class="py-24 bg-[#0d0709] relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-8">
+                    <div>
+                        <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-wine-glass-empty"></i> Tasting Notes
+                        </span>
+                        <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">感官品飲體驗</h2>
+                        <p class="text-gray-400 text-sm mt-2">開瓶即展現出極富層次感的深邃香氣與絲滑結構。</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Appearance -->
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-gold/20">
+                            <div class="w-12 h-12 rounded-xl bg-wine-600/30 border border-gold/40 text-gold flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-eye text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif-tc text-lg font-bold text-white">酒色外觀 (Appearance)</h4>
+                                <p class="text-gray-300 text-sm mt-1">深沉濃郁的寶石紅，邊緣微泛紫羅蘭光澤，展現出高濃縮度與極佳的成熟酚類質地。</p>
+                            </div>
+                        </div>
+
+                        <!-- Aroma -->
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-gold/20">
+                            <div class="w-12 h-12 rounded-xl bg-wine-600/30 border border-gold/40 text-gold flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-wind text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif-tc text-lg font-bold text-white">香氣表現 (Aroma & Nose)</h4>
+                                <p class="text-gray-300 text-sm mt-1">奔放的黑醋栗（Cassis）、黑櫻桃與桑葚果香，交織雪松木、菸草葉、摩卡咖啡與淡雅黑胡椒辛香。</p>
+                            </div>
+                        </div>
+
+                        <!-- Palate & Finish -->
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl bg-white/5 border border-gold/20">
+                            <div class="w-12 h-12 rounded-xl bg-wine-600/30 border border-gold/40 text-gold flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-temperature-empty text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif-tc text-lg font-bold text-white">口感與餘韻 (Palate & Finish)</h4>
+                                <p class="text-gray-300 text-sm mt-1">結構扎實而優雅，花崗岩土壤賦予的清涼酸度貫穿全期，單寧細緻如絲，尾韻悠長帶有雪松與乾燥香草甜美感。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decanting & Service Interactive Card -->
+                <div class="lg:col-span-5">
+                    <div class="glass-panel-gold rounded-3xl p-8 border border-gold/40 shadow-2xl space-y-6">
+                        <h3 class="font-serif-tc text-2xl font-bold text-white text-center border-b border-gold/30 pb-4">
+                            最佳品飲與醒酒指南
+                        </h3>
+
+                        <div class="space-y-5 text-sm">
+                            <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                                <span class="text-gray-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-temperature-half text-gold"></i> 建議適飲溫度
+                                </span>
+                                <span class="font-bold text-gold text-base">16°C – 18°C</span>
+                            </div>
+
+                            <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                                <span class="text-gray-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-hourglass-half text-gold"></i> 醒酒時間建議
+                                </span>
+                                <span class="font-bold text-white">建議提前 45-60 分鐘醒酒</span>
+                            </div>
+
+                            <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                                <span class="text-gray-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-box-archive text-gold"></i> 最佳陳年實力
+                                </span>
+                                <span class="font-bold text-white">採收後 8 – 20 年</span>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-wine-glass text-gold"></i> 推薦選用酒杯
+                                </span>
+                                <span class="font-bold text-white">大容量波爾多紅酒杯</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-wine-950/80 border border-gold/30 text-xs text-gray-300 leading-relaxed text-center">
+                            💡 <strong class="text-gold">侍酒師提示：</strong>年輕年份開瓶後建議以寬底醒酒器醒酒 1 小時，能完整綻放出卡本內與希哈的複方香料層次。
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Gourmet Food Pairing Matrix Section -->
+    <section id="pairing" class="py-24 bg-[#120a0e] relative border-t border-gold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-solid fa-utensils"></i> Gastronomy & Pairing
+                </span>
+                <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">頂級餐酒搭配饗宴</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">Estate Reserve 緊實單寧與酸度結構，能完美昇華肉品油脂與香料風味。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Pairing 1 -->
+                <div class="glass-card glass-panel rounded-3xl overflow-hidden group hover:border-gold transition-all duration-500">
+                    <div class="h-52 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop" alt="Ribeye Steak" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#120a0e] via-transparent to-transparent"></div>
+                        <span class="absolute top-4 right-4 bg-wine-900/90 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30">經典相襯</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif-tc text-xl font-bold text-white">頂級安格斯肋眼牛排</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed">
+                            牛排豐富的油脂與梅納反應香氣，能完美軟化紅酒中的扎實單寧，同時帶出圓潤飽滿的黑醋栗與木質香。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pairing 2 -->
+                <div class="glass-card glass-panel rounded-3xl overflow-hidden group hover:border-gold transition-all duration-500">
+                    <div class="h-52 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1514944298352-f4d73919e6d2?q=80&w=800&auto=format&fit=crop" alt="Rack of Lamb" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#120a0e] via-transparent to-transparent"></div>
+                        <span class="absolute top-4 right-4 bg-wine-900/90 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30">香料對比</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif-tc text-xl font-bold text-white">迷迭香蒜香烤羊排</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed">
+                            羊肉獨特的肉香與香草調味，能與酒液中混釀的 Syrah 希哈黑胡椒與雪松香氣互相輝映。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pairing 3 -->
+                <div class="glass-card glass-panel rounded-3xl overflow-hidden group hover:border-gold transition-all duration-500">
+                    <div class="h-52 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=800&auto=format&fit=crop" alt="Aged Cheese" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#120a0e] via-transparent to-transparent"></div>
+                        <span class="absolute top-4 right-4 bg-wine-900/90 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30">深度對話</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-serif-tc text-xl font-bold text-white">陳年 Comté / Manchego 起司</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed">
+                            硬質起司的結晶鹽感與濃郁乳香，襯托出葡萄酒礦物質脊梁與尾韻的甘甜餘香。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- International Accolades & Wall of Honor -->
+    <section id="awards" class="py-24 bg-[#0d0709] relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-semibold flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-solid fa-trophy"></i> Critical Acclaim
+                </span>
+                <h2 class="font-serif-tc text-3xl sm:text-4xl font-bold text-white">國際權威酒評家一致盛讚</h2>
+                <p class="text-gray-400 text-sm sm:text-base mt-3">橫掃全球頂級評鑑高分，南非波爾多風格紅酒的代表之作。</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="glass-panel p-6 rounded-2xl border border-gold/30 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <span class="font-display text-4xl font-bold gold-gradient-text block">5 Stars</span>
+                    <h4 class="font-serif-tc text-base font-bold text-white">Platter's Wine Guide</h4>
+                    <span class="inline-block px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-semibold">95 Points 最高五星</span>
+                    <p class="text-xs text-gray-400 pt-2 border-t border-white/10">南非權威指南聖經最高榮譽認證。</p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border border-gold/30 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <span class="font-display text-4xl font-bold gold-gradient-text block">94 pts</span>
+                    <h4 class="font-serif-tc text-base font-bold text-white">Decanter World Awards</h4>
+                    <span class="inline-block px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-semibold">Decanter 國際大獎</span>
+                    <p class="text-xs text-gray-400 pt-2 border-t border-white/10">英國醇鑑大賽評為最優雅波爾多調配。</p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border border-gold/30 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <span class="font-display text-4xl font-bold gold-gradient-text block">93 pts</span>
+                    <h4 class="font-serif-tc text-base font-bold text-white">Tim Atkin MW</h4>
+                    <span class="inline-block px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-semibold">Master of Wine 專文</span>
+                    <p class="text-xs text-gray-400 pt-2 border-t border-white/10">讚譽其單寧結構嚴謹且兼具易飲性。</p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border border-gold/30 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <span class="font-display text-4xl font-bold gold-gradient-text block">92+ pts</span>
+                    <h4 class="font-serif-tc text-base font-bold text-white">Wine Advocate</h4>
+                    <span class="inline-block px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-semibold">Robert Parker 團隊</span>
+                    <p class="text-xs text-gray-400 pt-2 border-t border-white/10">果香張力十足，具備 15 年以上陳年潛力。</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Inquiry & Reservation Form Section -->
+    <section id="inquiry" class="py-24 bg-[#120a0e] relative border-t border-gold/20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel-gold rounded-3xl p-8 sm:p-12 border border-gold/40 shadow-2xl relative">
+                
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="text-gold text-xs font-semibold uppercase tracking-[0.25em] block mb-2">Private Sommelier Tasting</span>
+                    <h2 class="font-serif-tc text-3xl font-bold text-white">尊榮品飲與購買諮詢</h2>
+                    <p class="text-gray-300 text-xs sm:text-sm mt-2">請填寫以下資訊，我們的侍酒顧問將儘速為您提供年份庫存與配額服務。</p>
+                </div>
+
+                <form onsubmit="handleInquirySubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gold mb-2">您的貴姓大名</label>
+                            <input type="text" required placeholder="例如：陳大為 先生" class="w-full bg-[#0d0709] border border-gold/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gold mb-2">聯絡電話</label>
+                            <input type="tel" required placeholder="0912-345-678" class="w-full bg-[#0d0709] border border-gold/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gold mb-2">電子郵件 E-mail</label>
+                        <input type="email" required placeholder="yourname@example.com" class="w-full bg-[#0d0709] border border-gold/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gold mb-2">諮詢需求 / 年份與數量</label>
+                        <textarea rows="4" placeholder="請告知您感興趣的年份、訂購箱數或私房品酒會預約需求..." class="w-full bg-[#0d0709] border border-gold/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors text-sm"></textarea>
+                    </div>
+
+                    <div class="text-center pt-4">
+                        <button type="submit" class="gold-btn w-full sm:w-auto px-12 py-4 rounded-full font-semibold text-xs uppercase tracking-widest">
+                            送出預約與詢價申請
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Confirmation Box -->
+                <div id="form-success-box" class="hidden mt-6 p-4 rounded-xl bg-gold/15 border border-gold text-gold text-center text-sm font-semibold">
+                    <i class="fa-solid fa-circle-check mr-2"></i> 感謝您的詢問！侍酒顧問已收到您的申請，將於 24 小時內與您聯繫。
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#080406] border-t border-gold/20 py-12 text-gray-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-wine-glass text-gold text-lg"></i>
+                <span class="font-display font-bold text-white tracking-widest text-sm">GLENELLY ESTATE RESERVE</span>
+            </div>
+            <p class="text-[11px] text-gray-500 text-center max-w-md">
+                禁止酒駕 • 飲酒過量有害健康 • 依法不販售酒品予未滿 18 歲之人
+            </p>
+            <div class="flex space-x-6 text-gray-400 text-base">
+                <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-gold transition-colors"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Navigation Toggle
+        const menuBtn = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-gold', 'text-wine-950', 'shadow-lg');
+                btn.classList.add('text-gray-300');
+            });
+
+            const activeContent = document.getElementById(tabId);
+            const activeBtn = document.getElementById('btn-' + tabId);
+
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-gold', 'text-wine-950', 'shadow-lg');
+                activeBtn.classList.remove('text-gray-300');
+            }
+        }
+
+        // Form Submission Simulation
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            const successBox = document.getElementById('form-success-box');
+            successBox.classList.remove('hidden');
+            successBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Interactive Terroir Canvas Initialization
+        const terroirData = [
+            {
+                x: 0.25, y: 0.70,
+                tag: "風土亮點 1",
+                title: "風化花崗岩土壤 (Decomposed Granite)",
+                desc: "Simonsberg 山坡覆蓋著古老的中生代風化花崗岩。土壤貧瘠且排水極佳，強迫葡萄藤根系深入數公尺深處汲取礦物質，賦予 Estate Reserve 堅實單寧與細緻礦物感。"
+            },
+            {
+                x: 0.50, y: 0.45,
+                tag: "風土亮點 2",
+                title: "Simonsberg 山麓坡度與海拔 (150-400m)",
+                desc: "坐落於 Stellenbosch 黃金地帶 Simonsberg 山脈南坡，海拔介於 150 至 400 公尺間。完美的日照角度確保卡本內與希哈達到完美的酚類成熟度。"
+            },
+            {
+                x: 0.78, y: 0.35,
+                tag: "風土亮點 3",
+                title: "False Bay 大西洋海風 (Cape Doctor)",
+                desc: "距離 False Bay 僅約 25 公里，強勁清涼的東南海風（Cape Doctor）吹拂過山谷，顯著降低生長季溫度，保留果實極佳的新鮮酸度與日夜溫差。"
+            }
+        ];
+
+        let activeTerroirIndex = 0;
+
+        function initTerroirCanvas() {
+            const canvas = document.getElementById('terroirCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                draw();
+            }
+
+            function draw() {
+                const w = canvas.width;
+                const h = canvas.height;
+                ctx.clearRect(0, 0, w, h);
+
+                // Sky Gradient
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.5);
+                skyGrad.addColorStop(0, '#1c0f16');
+                skyGrad.addColorStop(1, '#3b1622');
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, w, h * 0.5);
+
+                // Simonsberg Mountain Contour
+                ctx.beginPath();
+                ctx.moveTo(0, h * 0.6);
+                ctx.bezierCurveTo(w * 0.3, h * 0.2, w * 0.6, h * 0.15, w, h * 0.5);
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.closePath();
+                ctx.fillStyle = '#180a0f';
+                ctx.fill();
+                ctx.strokeStyle = '#d4af37';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Soil Layers Gradient
+                const soilGrad = ctx.createLinearGradient(0, h * 0.5, 0, h);
+                soilGrad.addColorStop(0, '#4a121a');
+                soilGrad.addColorStop(1, '#1a0b10');
+                ctx.fillStyle = soilGrad;
+                ctx.fill();
+
+                // Wind Lines
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.25)';
+                ctx.setLineDash([6, 6]);
+                ctx.beginPath();
+                ctx.moveTo(w * 0.8, h * 0.2);
+                ctx.bezierCurveTo(w * 0.6, h * 0.25, w * 0.4, h * 0.3, w * 0.1, h * 0.35);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Draw Hotspots
+                terroirData.forEach((pt, idx) => {
+                    const px = pt.x * w;
+                    const py = pt.y * h;
+                    const isActive = idx === activeTerroirIndex;
+
+                    // Pulsing Ring for active
+                    if (isActive) {
+                        ctx.beginPath();
+                        ctx.arc(px, py, 14, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
+                        ctx.fill();
+                    }
+
+                    // Outer Circle
+                    ctx.beginPath();
+                    ctx.arc(px, py, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = isActive ? '#f7e7be' : '#d4af37';
+                    ctx.fill();
+                    ctx.strokeStyle = '#0d0709';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Text Number
+                    ctx.fillStyle = '#0d0709';
+                    ctx.font = 'bold 10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(idx + 1, px, py);
+                });
+            }
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                const w = canvas.width;
+                const h = canvas.height;
+
+                terroirData.forEach((pt, idx) => {
+                    const px = pt.x * w;
+                    const py = pt.y * h;
+                    const dist = Math.hypot(mx - px, my - py);
+                    if (dist < 20) {
+                        activeTerroirIndex = idx;
+                        updateTerroirText(idx);
+                        draw();
+                    }
+                });
+            });
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        }
+
+        function updateTerroirText(idx) {
+            const item = terroirData[idx];
+            document.getElementById('terroir-tag').innerText = item.tag;
+            document.getElementById('terroir-title').innerText = item.title;
+            document.getElementById('terroir-desc').innerText = item.desc;
+        }
+
+        // Initialize Chart.js Dashboard Charts
+        function initCharts() {
+            // Blend Doughnut Chart
+            const blendCtx = document.getElementById('blendChart');
+            if (blendCtx) {
+                new Chart(blendCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Cabernet Sauvignon (64%)',
+                            'Syrah (12%)',
+                            'Merlot (12%)',
+                            'Petit Verdot (7%)',
+                            'Cabernet Franc (5%)'
+                        ],
+                        datasets: [{
+                            data: [64, 12, 12, 7, 5],
+                            backgroundColor: [
+                                '#721c2b', // Wine Crimson
+                                '#d4af37', // Gold
+                                '#9e2a3b', // Medium Wine
+                                '#b89a4d', // Muted Gold
+                                '#3d101a'  // Dark Wine
+                            ],
+                            borderColor: '#120a0e',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#e5e7eb',
+                                    font: { family: 'Plus Jakarta Sans', size: 11 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ' ' + context.label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Sensory Radar Chart
+            const radarCtx = document.getElementById('radarChart');
+            if (radarCtx) {
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['黑色果香 (Fruit)', '單寧結構 (Tannin)', '酸度新鮮度 (Acidity)', '橡木桶複雜度 (Oak)', '陳年潛力 (Aging)'],
+                        datasets: [{
+                            label: 'Glenelly Estate Reserve',
+                            data: [92, 88, 86, 85, 95],
+                            backgroundColor: 'rgba(212, 175, 55, 0.25)',
+                            borderColor: '#d4af37',
+                            pointBackgroundColor: '#f7e7be',
+                            pointBorderColor: '#0d0709',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.15)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.15)' },
+                                pointLabels: {
+                                    color: '#e5e7eb',
+                                    font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' }
+                                },
+                                ticks: { display: false, backdropColor: 'transparent' },
+                                min: 50,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTerroirCanvas();
+            initCharts();
+        });
+    </script>
+</body>
+</html>
